@@ -1,6 +1,6 @@
-import Mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-const postSchema = new schema(
+const postSchema = new Schema(
     {
         typeofEvent: {
             type: String,
@@ -43,4 +43,4 @@ var urlValidator = [
 ]
 
 
-export const Posts = Mongoose.model("Posts", postSchema)
+export const Posts = mongoose.model("Post", postSchema);

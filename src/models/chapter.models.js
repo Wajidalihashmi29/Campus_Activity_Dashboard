@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const chapterSchema = new Mongoose.Schema(
+const chapterSchema = new Schema(
     {
         chapterName:{
             type: String,
@@ -30,7 +30,7 @@ const chapterSchema = new Mongoose.Schema(
         postHistory:[
             {
                 type: Schema.Types.ObjectId,
-                ref: "Posts"
+                ref: "Post"
             }
         ],
         refreshToken: {
@@ -44,4 +44,4 @@ const chapterSchema = new Mongoose.Schema(
 );
 
 
-export const Chapter = Mongoose.model("Chapter", chapterSchema )
+export const Chapter = mongoose.model("Chapter", chapterSchema );
