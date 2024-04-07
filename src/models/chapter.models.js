@@ -33,7 +33,12 @@ const chapterSchema = new Mongoose.Schema(
                 ref: "Posts"
             }
         ],
-        
+        refreshToken: {
+            type: String,
+        }
+    },
+    {
+        timestamps: true
     }
 
 );
