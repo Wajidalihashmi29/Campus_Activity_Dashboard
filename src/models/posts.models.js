@@ -41,3 +41,6 @@ var urlValidator = [
         }
     )
 ]
+
+
+export const Posts = Mongoose.model("Posts", postSchema)

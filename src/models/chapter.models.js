@@ -39,4 +39,4 @@ const chapterSchema = new Mongoose.Schema(
 );
 
 
-export const Post = Mongoose.model("Chapter", chapterSchema )
+export const Chapter = Mongoose.model("Chapter", chapterSchema )
