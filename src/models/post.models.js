@@ -2,6 +2,10 @@ import mongoose, { Schema } from "mongoose";
 
 const postSchema = new Schema(
     {
+        chapter: {
+            type: Schema.Types.ObjectId,
+            ref: "Chapter"
+        },
         typeofEvent: {
             type: String,
             required: true,
@@ -22,8 +26,10 @@ const postSchema = new Schema(
         registrationLink: {
             type: String,
             required: true,
+            unique: true,
             validate: urlValidator,
-        }
+        },
+        
     }
 )
 var validate = require('mongoose-validator')

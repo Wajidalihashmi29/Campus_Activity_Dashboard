@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 
 const chapterSchema = new Schema(
     {
-        chapterName:{
+        chapterName: {
             type: String,
             required: true,
             trim: true,
