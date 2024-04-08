@@ -30,6 +30,9 @@ const postSchema = new Schema(
             validate: urlValidator,
         },
         
+    },
+    {
+        timestamps: true
     }
 )
 var validate = require('mongoose-validator')
