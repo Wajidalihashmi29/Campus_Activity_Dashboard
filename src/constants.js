@@ -1,3 +1,2 @@
-const DB_NAME = "project";
+export const DB_NAME = "project";
 
-export {DB_NAME};
