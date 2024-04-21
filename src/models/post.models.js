@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 
 const postSchema = new Schema(
     {
@@ -6,11 +7,19 @@ const postSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: "Chapter"
         },
+        eventImage: {
+            type: String, //Cloudinary url
+            required: true,
+        },
         typeofEvent: {
             type: String,
             required: true,
             trim: true,
             lowercase: true,
+        },
+        titleOfEvent: {
+            type: String,
+            required: true,
         },
         descriptionOfEvent: {
             type: String,
@@ -35,6 +44,9 @@ const postSchema = new Schema(
         timestamps: true
     }
 )
+
+postSchema.plugin(mongooseAggregatePaginate)
+
 var validate = require('mongoose-validator')
 var urlValidator = [
     validate(
