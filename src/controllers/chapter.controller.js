@@ -6,27 +6,31 @@ import { ApiResponse } from "../utils/ApiResponse.js"
 
 const register = asyncHandler(async (req, res) => {
     const {chapterName, chapterDescription, email, password, username} = req.body
-    console.log("email", email)
-
+    
     if([chapterName, chapterDescription, email, password, username].some((field) => field?.trim()==="")){
         throw new ApiError(400, "All feilds are Required!!!")
     }
 
-    const existedChapter = Chapter.findOne({
+    const existedChapter = await Chapter.findOne({
         $or: [{email}, {username}]
     })
 
     if (existedChapter){
         throw new ApiError(409, "Chapter with username or email already exists!!!")
     }
-    const avatarPath = req.files?.avatar[0]?.path;
-    if (!avatarPath) {
-        throw new ApiError(400,"Avatar file required")
+    let avatarImagePath;
+    if(req.files && Array.isArray(req.files.avatar) && req.files.avatar.length > 0){
+        avatarImagePath = req.files.avatar[0].path;
     }
-    const avatar = await uploadOnCloudinary(avatarPath)
+    
+    
+    if (!avatarImagePath) {
+        throw new ApiError(400,"Avatar required")
+    }
+    const avatar = await uploadOnCloudinary(avatarImagePath)
 
     if (!avatar) {
-        throw new ApiError(400,"Avatar file required")
+        throw new ApiError(400,"Avatar required")
     }
 
     const chapter = await Chapter.create({
