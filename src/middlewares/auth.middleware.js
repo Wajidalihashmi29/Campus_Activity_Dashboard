@@ -3,13 +3,12 @@ import asyncHandler from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken"
 import {Chapter} from "../models/chapter.models.js"
 
-
-const verifyJWT = asyncHandler(async(req, _, next) =>{
+const verifyJWT = asyncHandler( async (req, res, next) =>{
     try {
-        const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ","")
+        const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
     
         if (!token) {
-            throw new ApiError(401, "Unauthorised request")
+            throw new ApiError(401, "Unauthorised request!!!")
         }
         
         const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)

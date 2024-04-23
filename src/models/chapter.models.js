@@ -72,7 +72,7 @@ chapterSchema.methods.generateAccessToken = function(){
         {
             _id: this._id,
             email: this.email,
-            usernameame: this.username,
+            username: this.username,
             
         },
         process.env.ACCESS_TOKEN_SECRET,

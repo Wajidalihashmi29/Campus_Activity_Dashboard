@@ -4,9 +4,10 @@ import { Chapter } from "../models/chapter.models.js"
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js"
 
+
 const generateAccessAndRefreshToken = async (userId) => {
     try {
-      const user = await UserActivation.findById(userId)
+      const user = await Chapter.findById(userId)
       const accessToken = user.generateAccessToken()
       const refreshToken = user.generateRefreshToken()
 
@@ -14,7 +15,6 @@ const generateAccessAndRefreshToken = async (userId) => {
       await user.save({validateBeforeSave: false})
 
       return {accessToken, refreshToken}
-
 
     } catch (error) {
         throw new ApiError(500, "Something went wrong while generating access and refresh token")
@@ -70,7 +70,7 @@ const register = asyncHandler(async (req, res) => {
 
 })
 
-const login = asyncHandler(async (rq, res) => {
+const login = asyncHandler(async (req, res) => {
     const {username, password} = req.body
 
     if(!username){
@@ -91,7 +91,7 @@ const login = asyncHandler(async (rq, res) => {
     }
 
     const {accessToken, refreshToken} = await generateAccessAndRefreshToken(user._id)
-    const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
+    const loggedInUser = await Chapter.findById(user._id).select("-password -refreshToken")
 
     const options = {
         httpOnly: true,
