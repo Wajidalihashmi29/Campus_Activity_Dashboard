@@ -20,5 +20,7 @@ import chapterRouter from "./routes/chapter.routes.js"
 //routes decleration
 app.use("/api/v1/chapter", chapterRouter)
 
+import postRouter from "./routes/post.routes.js"
+app.use("/api/v1/post", postRouter)
 
 export default app;
