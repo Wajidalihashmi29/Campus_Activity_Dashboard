@@ -43,12 +43,12 @@ const register = asyncHandler(async (req, res) => {
     
     
     if (!avatarImagePath) {
-        throw new ApiError(400,"Avatar required")
+        throw new ApiError(400,"Avatar required!!!")
     }
     const avatar = await uploadOnCloudinary(avatarImagePath)
 
     if (!avatar) {
-        throw new ApiError(400,"Avatar required")
+        throw new ApiError(400,"Something went wrong while uploading avatar!!!")
     }
 
     const chapter = await Chapter.create({
@@ -191,6 +191,31 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, req.user, "Current user fetched successfully"))
 })
 
+const postHistory = asyncHandler(async (req, res) => {
+    const user = await Chapter.aggregate([
+        {
+          $match: {
+            _id: req.user._id
+          }
+        },
+        {
+          $lookup: {
+            from: "posts",
+            localField: "postHistory",
+            foreignField: "_id",
+            as: "postHistory"
+          }
+        }
+    ]);
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            user[0].postHistory,
+            "Post History fetched successfully!!!"
+        )
+    );
+})
 
 export {
     register,
@@ -198,5 +223,6 @@ export {
     logout,
     refreshAccessToken,
     getCurrentUser,
-    changePassword
+    changePassword,
+    postHistory
 };
