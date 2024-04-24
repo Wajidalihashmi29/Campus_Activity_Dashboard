@@ -4,6 +4,7 @@ import { Chapter } from "../models/chapter.models.js"
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js"
 import jwt from "jsonwebtoken"
+import { Post } from "../models/post.models.js";
 
 
 const generateAccessAndRefreshToken = async (userId) => {
@@ -23,9 +24,9 @@ const generateAccessAndRefreshToken = async (userId) => {
 }
 
 const register = asyncHandler(async (req, res) => {
-    const {chapterName, chapterDescription, email, password, username} = req.body
+    const {chapterName, chapterDescription, email, password, username, role} = req.body
     
-    if([chapterName, chapterDescription, email, password, username].some((field) => field?.trim()==="")){
+    if([chapterName, chapterDescription, email, password, username, role].some((field) => field?.trim()==="")){
         throw new ApiError(400, "All feilds are Required!!!")
     }
 
@@ -57,7 +58,8 @@ const register = asyncHandler(async (req, res) => {
         avatar: avatar.url,
         email,
         password,
-        chapterDescription
+        chapterDescription,
+        role
     })
     const createdChapter = await Chapter.findById(chapter._id).select(
         "-password -refreshToken"
@@ -217,6 +219,21 @@ const postHistory = asyncHandler(async (req, res) => {
     );
 })
 
+const adminPostHistory = asyncHandler(async(req, res) => {
+    if(req.user.role === 'regular') throw new ApiError(401, "Unauthorized request")
+
+    const posts = await Post.find({});
+    posts.reverse();
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            posts,
+            "Posts fetched successfully"
+        )
+    );
+});
+
+
 export {
     register,
     login,
@@ -224,5 +241,6 @@ export {
     refreshAccessToken,
     getCurrentUser,
     changePassword,
-    postHistory
+    postHistory,
+    adminPostHistory
 };

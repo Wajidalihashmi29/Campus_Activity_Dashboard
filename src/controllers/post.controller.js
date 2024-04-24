@@ -65,15 +65,31 @@ const createPost = asyncHandler(async (req, res) => {
     )
     
 })
-
-
-
-
-
-
-
+const getAllFuturePosts = asyncHandler(async (req, res) => {
+    const allThePosts = await Post.find({})
+    const currentDate = new Date()
+    const allFutureEvents = allThePosts.filter(post => {
+        const parts = post.dateofEvent.split("/")
+        const comparisonDate = new Date( parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0])+1);
+        return comparisonDate >= currentDate
+    })
+    allFutureEvents.sort((a, b) => {
+        // Parse date strings to Date objects
+        const dateA = new Date(a.dateofEvent.split('/').reverse().join('-'));
+        const dateB = new Date(b.dateofEvent.split('/').reverse().join('-'));    
+        // Compare dates
+        return dateA - dateB;
+    });
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            allFutureEvents,
+            "Current and future events fetched Successfully!!!"
+        )
+    )
+})
 
 export {
     createPost,
-    
+    getAllFuturePosts    
 }

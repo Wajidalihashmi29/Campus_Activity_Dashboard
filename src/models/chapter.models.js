@@ -33,6 +33,11 @@ const chapterSchema = new Schema(
             unique: true,
             lowercase: true,
         },
+        role: {
+            type: String, 
+            required: true,
+            trim: true
+        },
         password: {
             type: String,
             required: [true, 'Password is required!!'],
