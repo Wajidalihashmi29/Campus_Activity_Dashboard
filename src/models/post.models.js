@@ -28,7 +28,7 @@ const postSchema = new Schema(
             lowercase: true,
         },
         dateofEvent: {
-            type: Date,
+            type: String,
             required: true,
             default: Date.now
         },
@@ -36,7 +36,6 @@ const postSchema = new Schema(
             type: String,
             required: true,
             unique: true,
-            validate: urlValidator,
         },
         
     },
@@ -44,24 +43,6 @@ const postSchema = new Schema(
         timestamps: true
     }
 )
-
-postSchema.plugin(mongooseAggregatePaginate)
-
-var validate = require('mongoose-validator')
-var urlValidator = [
-    validate(
-        {
-            validator: value => validator.isURL(
-                value, { 
-                    protocols: ['http','https','ftp'],
-                    require_tld: true,
-                    require_protocol: true
-                }
-            ),
-            message: 'Must be a Valid URL'
-        }
-    )
-]
 
 
 export const Post = mongoose.model('Post', postSchema);
