@@ -7,6 +7,11 @@ const postSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: "Chapter"
         },
+        chapterName:{
+            type: String,
+            required: true,
+            trim: true
+        },
         typeofEvent: {
             type: String,
             required: true,

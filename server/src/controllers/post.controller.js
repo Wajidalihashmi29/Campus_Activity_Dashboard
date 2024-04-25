@@ -32,7 +32,8 @@ const createPost = asyncHandler(async (req, res) => {
     // if (!eventImage) {
     //     throw new ApiError(400,"Something went wrong while uploading image!!!")
     // }
-    
+    const chapter = await Chapter.findById(req.user._id);
+
     const post = await Post.create({
         // eventImage: eventImage.url,
         typeofEvent, 
@@ -41,13 +42,11 @@ const createPost = asyncHandler(async (req, res) => {
         dateofEvent,  
         registrationLink,
         chapter: req.user._id,
+        chapterName: chapter.chapterName,
     });
-    console.log(post)
     if (!post) {
         throw new ApiError(500, "Something went wrong while posting!!!")        
-    }
-
-    const chapter = await Chapter.findById(req.user._id);
+    }   
 
     chapter.postHistory.push(post?._id);
 
@@ -65,12 +64,47 @@ const createPost = asyncHandler(async (req, res) => {
     )
     
 })
+// const getAllFuturePosts = asyncHandler(async (req, res) => {
+//     const allThePosts = await Post.find({})
+//     const currentDate = new Date()
+//     const allFutureEvents = allThePosts.filter(post => {
+//         const parts = post.dateofEvent.split("-")
+//         const comparisonDate = new Date( parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0])+1);
+//         return comparisonDate >= currentDate
+//     })
+//     // allFutureEvents.sort((a, b) => {
+//     //     // Parse date strings to Date objects
+//     //     const dateA = new Date(a.dateofEvent.split('/').reverse().join('-'));
+//     //     const dateB = new Date(b.dateofEvent.split('/').reverse().join('-'));    
+//     //     // Compare dates
+//     //     return dateA - dateB;
+//     // };
+//     allFutureEvents.reverse()
+
+//     const finalEvents = await Promise.all(allFutureEvents.map(asyncHandler(async (post) => {
+//         const chapterId = post.chapter;
+//         const chapter = await Chapter.findById(chapterId);
+//         const name = chapter.chapterName;
+//         post.chapterName = name;
+//         console.log(post.chapterName);
+//         return post;
+//     })));
+//     console.log(finalEvents)
+//     return res.status(200).json(
+//         new ApiResponse(
+//             200,
+//             finalEvents,
+//             "Current and future events fetched Successfully!!!"
+//         )
+//     )
+// })
 const getAllFuturePosts = asyncHandler(async (req, res) => {
     const allThePosts = await Post.find({})
     const currentDate = new Date()
     const allFutureEvents = allThePosts.filter(post => {
         const parts = post.dateofEvent.split("-")
         const comparisonDate = new Date( parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0])+1);
+        console.log(comparisonDate)
         return comparisonDate >= currentDate
     })
     // allFutureEvents.sort((a, b) => {
@@ -81,20 +115,11 @@ const getAllFuturePosts = asyncHandler(async (req, res) => {
     //     return dateA - dateB;
     // };
     allFutureEvents.reverse()
-    
-    const finalEvents = await Promise.all(allFutureEvents.map(asyncHandler(async (post) => {
-        const chapterId = post.chapter;
-        const chapter = await Chapter.findById(chapterId);
-        const name = chapter.chapterName;
-        post.chapterName = name;
-        console.log(post.chapterName);
-        return post;
-    })));
-    console.log(finalEvents)
+
     return res.status(200).json(
         new ApiResponse(
             200,
-            finalEvents,
+            allFutureEvents,
             "Current and future events fetched Successfully!!!"
         )
     )
