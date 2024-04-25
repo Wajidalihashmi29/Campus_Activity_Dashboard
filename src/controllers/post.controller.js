@@ -55,7 +55,7 @@ const createPost = asyncHandler(async (req, res) => {
 
     const createdPost = await Post.findById(post._id).select();
     return res
-    .status(201)
+    .status(200)
     .json(
         new ApiResponse(
             200,
