@@ -7,10 +7,6 @@ const postSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: "Chapter"
         },
-        eventImage: {
-            type: String, //Cloudinary url
-            required: true,
-        },
         typeofEvent: {
             type: String,
             required: true,

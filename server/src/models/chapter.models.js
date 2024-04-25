@@ -42,10 +42,6 @@ const chapterSchema = new Schema(
             type: String,
             required: [true, 'Password is required!!'],
         },
-        avatar:{
-            type: String, // Cloudinary url
-            required: true,
-        },
         postHistory:[
             {
                 type: Schema.Types.ObjectId,
