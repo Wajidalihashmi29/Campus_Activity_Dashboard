@@ -98,32 +98,32 @@ const createPost = asyncHandler(async (req, res) => {
 //         )
 //     )
 // })
+// 
 const getAllFuturePosts = asyncHandler(async (req, res) => {
-    const allThePosts = await Post.find({})
-    const currentDate = new Date()
+    const allThePosts = await Post.find({});
+    const currentDate = new Date();
     const allFutureEvents = allThePosts.filter(post => {
-        const parts = post.dateofEvent.split("-")
-        const comparisonDate = new Date( parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0])+1);
-        console.log(comparisonDate)
-        return comparisonDate >= currentDate
-    })
-    // allFutureEvents.sort((a, b) => {
-    //     // Parse date strings to Date objects
-    //     const dateA = new Date(a.dateofEvent.split('/').reverse().join('-'));
-    //     const dateB = new Date(b.dateofEvent.split('/').reverse().join('-'));    
-    //     // Compare dates
-    //     return dateA - dateB;
-    // };
-    allFutureEvents.reverse()
+        let comparisonDate;
+        if (post.dateofEvent instanceof Date) {
+            comparisonDate = post.dateofEvent; // If the date is already a Date object
+        } else {
+            comparisonDate = new Date(post.dateofEvent); // Parse date string to Date object
+        }
+        console.log("Original date format:", post.dateofEvent);
+        console.log("Comparison date:", comparisonDate);
+        return comparisonDate >= currentDate;
+    });
+
+    allFutureEvents.reverse();
 
     return res.status(200).json(
         new ApiResponse(
             200,
             allFutureEvents,
-            "Current and future events fetched Successfully!!!"
+            "Current and future events fetched successfully!!!"
         )
-    )
-})
+    );
+});
 
 export {
     createPost,
